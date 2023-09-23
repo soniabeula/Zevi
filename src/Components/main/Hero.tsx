@@ -23,6 +23,7 @@ const useStyles: any = makeStyles((theme: any) => ({
 
 const Hero = () => {
   const [isInputFocused, setInputFocused] = useState(false);
+  const [searchString, setSearchString] = useState<String>("");
 
   const classes = useStyles();
   return (
@@ -34,6 +35,8 @@ const Hero = () => {
           <TextField
             className={`${styles.textField} ${classes.input}`}
             placeholder="Search"
+            value={searchString}
+            onChange={(e: any) => setSearchString(e.target.value)}
             InputProps={{
               type: "search",
               endAdornment: <SearchIcon color="action" />,
@@ -49,9 +52,7 @@ const Hero = () => {
           />
         </div>
         <div className={styles.CardContainer}>
-          {/* {isInputFocused && ( */}
-            <SuggestionBox setInputFocused={setInputFocused} />
-          {/* )} */}
+          {searchString && <SuggestionBox setInputFocused={setInputFocused} />}
         </div>
       </div>
     </>
