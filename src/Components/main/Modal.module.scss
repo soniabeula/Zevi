@@ -1,50 +1,54 @@
 .dialogContainer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
-  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  // width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
 .modalHeader {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-//   border: 1px solid magenta;
+  //   border: 1px solid magenta;
 }
 
-
 .search {
-//   height: 20px !important;
+  //   height: 20px !important;
   display: flex;
   flex-direction: row;
   justify-content: center;
-//   border: 1px solid green;
+  //   border: 1px solid green;
 }
 .modalRootContainer {
-//   height: 100vh;
+  //   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-//   border: 2px solid magenta;
+  //   border: 2px solid magenta;
 }
 .gridContainer {
-//   width: 100%;
+    width: 100%;
   // border: 2px solid red;
   padding: 0 !important;
   margin: 0 !important;
 }
 
 .gridContainer1 {
-//   border: 1px solid magenta;
+  //   border: 1px solid magenta;
   padding: 1rem;
+  
 }
 .gridContainer2 {
-//   border: 1px solid magenta;
+  //   border: 1px solid magenta;
+ 
+}
+
+.cardsContainer{
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -54,35 +58,42 @@
   align-items: start;
 }
 
-.search{
-    width: 100% !important;
+.search {
+  width: 100% !important;
 }
 .searchcontainer {
-    width: 50% !important;
-    z-index: 1;
-    height: 3rem;
-    // border: 1px solid green;
-    
-  }
-  
-  .textField {
-    background-color: #fff !important;
-    height: 100% !important;
-    width: 100%;
-  }
+  width: 50% !important;
+  z-index: 1;
+  height: 3rem;
+  // border: 1px solid green;
+}
 
-  .gridContainer1Header{
-    font-size: 2rem;
-  }
+.textField {
+  background-color: #fff !important;
+  height: 100% !important;
+  width: 100%;
+}
 
-  .accordian{
-    border: none !important;
-    box-shadow: none !important;
-  }
+.gridContainer1Header {
+  font-size: 2rem;
+}
 
-  @media (max-width:768px){
-    .gridContainer2{
-        justify-content: center;
-        align-items: center;
-    }
+.accordian {
+  border: none !important;
+  box-shadow: none !important;
+}
+.noData {
+  height: 60%;
+  width: 100%;
+  object-fit: cover;
+}
+@media (max-width: 768px) {
+  .gridContainer2 {
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
   }
+  .searchcontainer {
+    width: 80% !important;
+  }
+}

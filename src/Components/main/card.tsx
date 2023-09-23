@@ -1,27 +1,68 @@
 import styles from "./Card.module.scss";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Rating from "@mui/material/Rating";
+import { useState } from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const Card = function () {
+export type CardType = {
+  name: string;
+  brand: string;
+  rating: number;
+  img: string;
+  price: number;
+  discount: number;
+  isFavorite: boolean;
+  people: number;
+};
+
+const Card = function ({
+  name,
+  brand,
+  rating,
+  price,
+  discount,
+  isFavorite,
+  img,
+  people,
+}: CardType) {
+  const [isfavorite, setIsFavorite] = useState(isFavorite);
+  const [isHover, setIsHover] = useState(false);
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={() => setIsHover(true)}>
       <div className={styles.imageContainer}>
-        <img
-          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80"
-          alt="image"
-          className={styles.cardImage}
-        />
-        <FavoriteIcon className={styles.favouriteIcon} />
+        <img src={img} alt="image" className={styles.cardImage} />
+        <div className={styles.viewProduct} >{"View Product"}</div>
+        {isfavorite ? (
+          <FavoriteIcon
+            onClick={() => setIsFavorite(!isfavorite)}
+            className={styles.favouriteIcon}
+          />
+        ) : (
+          <FavoriteBorderIcon
+            onClick={() => setIsFavorite(!isfavorite)}
+            className={styles.favouriteIcon}
+          />
+        )}
       </div>
       <div className={styles.detailsContainer}>
-        <p className={styles.cardName}>dummy name</p>
+        <p className={styles.cardName}>{name}</p>
         <div className={styles.priceContainer}>
-            <p className={styles.price1}>$2000</p>
-            <p className={styles.price2}>$2000</p>
+          <p className={styles.price1}>{discount}</p>
+          <p className={styles.price2}>{`$${price}`}</p>
         </div>
-        <Rating readOnly name="simple-controlled" value={3} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <Rating readOnly name="simple-controlled" value={rating} />
+          <p style={{ fontSize: "12px", margin: 0 }}>{`(${people})`}</p>
+        </div>
       </div>
-      
     </div>
   );
 };

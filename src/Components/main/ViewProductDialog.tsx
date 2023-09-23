@@ -19,6 +19,9 @@ import { makeStyles } from "@mui/styles";
 import Card from "./card";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Rating from "@mui/material/Rating";
+import { data } from "../../data/productData";
+import { useState, useEffect } from "react";
+import noData from "../../assets/nodata.png";
 
 export type ViewProductDialogType = {
   openDialog: boolean;
@@ -42,6 +45,24 @@ const ViewProductDialog = ({
   setOpenDialog,
 }: ViewProductDialogType) => {
   const classes = useStyles();
+  const [searchString, setSearchString] = useState("");
+  const [filteredData, setFilteredData] = useState<any>();
+  const [brands, setBrands] = useState<any>([]);
+
+  useEffect(() => {
+    setFilteredData(data);
+    const brand = data?.map((item: any) => item.brand);
+    // const uniqueBrands = [...new Set(brands)];
+    setBrands(brand);
+  }, [data]);
+
+  useEffect(() => {
+    const searchedData = data?.filter((item: any) =>
+      item.name.toLowerCase().includes(searchString)
+    );
+    setFilteredData(searchedData);
+  }, [searchString]);
+
   return (
     <Dialog fullScreen open={openDialog} onClose={() => setOpenDialog(false)}>
       <div className={styles.dialogContainer}>
@@ -57,29 +78,25 @@ const ViewProductDialog = ({
             <CloseIcon />
           </IconButton>
         </div>
-        <div className={styles.search}> <div className={styles.searchcontainer}>
-          <TextField
-            className={`${styles.textField} ${classes.input}`}
-            placeholder="Search"
-            InputProps={{
-              type: "search",
-              endAdornment: <SearchIcon color="action" />,
-              //   onFocus: () => {
-              //     setInputFocused(true);
-              //   },
-              //   onBlur: () => {
-              //     setTimeout(() => {
-              //       setInputFocused(false);
-              //     }, 100);
-              //   },
-            }}
-          />
-        </div></div>
-       
+        <div className={styles.search}>
+          {" "}
+          <div className={styles.searchcontainer}>
+            <TextField
+              className={`${styles.textField} ${classes.input}`}
+              placeholder="Search"
+              onChange={(e) => setSearchString(e.target.value)}
+              InputProps={{
+                type: "search",
+                endAdornment: <SearchIcon color="action" />,
+              }}
+            />
+          </div>
+        </div>
+
         <div className={styles.modalRootContainer}>
           <div className={styles.gridContainer}>
             <Grid container spacing={2} columns={12}>
-              <Grid item xs={12} lg={3}   className={styles.gridContainer1}>
+              <Grid item xs={12} md={3} className={styles.gridContainer1}>
                 <p className={styles.gridContainer1Header}>Search Results</p>
                 <Accordion className={styles.accordian}>
                   <AccordionSummary
@@ -91,14 +108,9 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails>
                     <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox  />}
-                        label="Wrogn"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox  />}
-                        label="Adidas"
-                      />
+                      {brands?.map((item: any) => (
+                        <FormControlLabel control={<Checkbox />} label={item} />
+                      ))}
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
@@ -113,11 +125,11 @@ const ViewProductDialog = ({
                   <AccordionDetails>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox  />}
+                        control={<Checkbox />}
                         label="Under 500"
                       />
                       <FormControlLabel
-                        control={<Checkbox  />}
+                        control={<Checkbox />}
                         label="Above 500"
                       />
                     </FormGroup>
@@ -134,37 +146,68 @@ const ViewProductDialog = ({
                   <AccordionDetails>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox  />}
-                        label={<Rating readOnly name="simple-controlled" value={5} />}
+                        control={<Checkbox />}
+                        label={
+                          <Rating readOnly name="simple-controlled" value={5} />
+                        }
                       />
                       <FormControlLabel
-                        control={<Checkbox  />}
-                        label={<Rating readOnly name="simple-controlled" value={4} />}
+                        control={<Checkbox />}
+                        label={
+                          <Rating readOnly name="simple-controlled" value={4} />
+                        }
                       />
                       <FormControlLabel
-                        control={<Checkbox  />}
-                        label={<Rating readOnly name="simple-controlled" value={3} />}
+                        control={<Checkbox />}
+                        label={
+                          <Rating readOnly name="simple-controlled" value={3} />
+                        }
                       />
                       <FormControlLabel
-                        control={<Checkbox  />}
-                        label={<Rating readOnly name="simple-controlled" value={2} />}
+                        control={<Checkbox />}
+                        label={
+                          <Rating readOnly name="simple-controlled" value={2} />
+                        }
                       />
                       <FormControlLabel
-                        control={<Checkbox  />}
-                        label={<Rating readOnly name="simple-controlled" value={1} />}
+                        control={<Checkbox />}
+                        label={
+                          <Rating readOnly name="simple-controlled" value={1} />
+                        }
                       />
-                      
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
               </Grid>
-              <Grid item xs={12} lg={9} className={styles.gridContainer2}>
-                <Card />
-                <Card />
-                <Card />
-                <Card /> <Card />
-                <Card />
-              </Grid>
+
+              {filteredData?.length > 0 ? (
+                <Grid item xs={12} md={9} className={styles.gridContainer2}>
+                  <div className={styles.cardsContainer}>
+                    {filteredData?.map((item: any) => {
+                      return (
+                        <Card
+                          img={item.image}
+                          name={item.name}
+                          brand={item.brand}
+                          rating={item.rating}
+                          price={item.price}
+                          discount={item.discount}
+                          isFavorite={item.isFavorite}
+                          people={item.people}
+                        />
+                      );
+                    })}
+                  </div>
+                </Grid>
+              ) : (
+                <Grid item xs={12} md={9} className={styles.gridContainer2}>
+                  <img
+                    className={styles.noData}
+                    src={noData}
+                    alt={"No data"}
+                  ></img>
+                </Grid>
+              )}
             </Grid>
           </div>
         </div>
