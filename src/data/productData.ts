@@ -77,7 +77,7 @@ export const data = [
     brand: "Mango",
     people:210,
     rating: 1,
-    price: 500,
+    price: 400,
     discount: 800,
     isFavorite: false,
     image:

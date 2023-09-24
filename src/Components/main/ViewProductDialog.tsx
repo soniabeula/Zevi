@@ -9,6 +9,8 @@ import {
   Grid,
   TextField,
   Typography,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
 import styles from "./Modal.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
@@ -52,8 +54,8 @@ const ViewProductDialog = ({
   useEffect(() => {
     setFilteredData(data);
     const brand = data?.map((item: any) => item.brand);
-    // const uniqueBrands = [...new Set(brands)];
-    setBrands(brand);
+    const uniqueBrands = Array.from(new Set(brand));
+    setBrands(uniqueBrands);
   }, [data]);
 
   useEffect(() => {
@@ -62,6 +64,34 @@ const ViewProductDialog = ({
     );
     setFilteredData(searchedData);
   }, [searchString]);
+
+  const handleCheckboxChange = (event: any) => {
+    const itemName = event.target.value;
+
+    if (itemName === "All") {
+      setFilteredData(data);
+    } else {
+      const filteredBrand = data?.filter(
+        (item: any) => itemName === item.brand
+      );
+      setFilteredData(filteredBrand);
+    }
+  };
+  const handlePriceChange = (e: any) => {
+    if (e.target.value === "Under 500") {
+      const filteredPrice = filteredData?.filter((item: any) => {
+        return item.price < 500;
+      });
+      setFilteredData(filteredPrice);
+    } else if (e.target.value === "Above 500") {
+      const filteredPrice = filteredData?.filter(
+        (item: any) => item.price > 500
+      );
+      setFilteredData(filteredPrice);
+    } else {
+      setFilteredData(filteredData);
+    }
+  };
 
   return (
     <Dialog fullScreen open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -108,9 +138,31 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails>
                     <FormGroup>
-                      {brands?.map((item: any) => (
-                        <FormControlLabel control={<Checkbox />} label={item} />
-                      ))}
+                      <RadioGroup defaultValue={"All"}>
+                        <FormControlLabel
+                          key={"All"}
+                          control={
+                            <Radio
+                              onChange={handleCheckboxChange}
+                              value={"All"}
+                            />
+                          }
+                          label={"All"}
+                        />
+                        {brands?.map((item: any) => (
+                          <FormControlLabel
+                            key={item}
+                            value={item}
+                            control={
+                              <Radio
+                                onChange={handleCheckboxChange}
+                                value={item}
+                              />
+                            }
+                            label={item}
+                          />
+                        ))}
+                      </RadioGroup>
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
@@ -124,14 +176,32 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails>
                     <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox />}
-                        label="Under 500"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox />}
-                        label="Above 500"
-                      />
+                      <RadioGroup defaultValue={"All"}>
+                        <FormControlLabel
+                          control={
+                            <Radio value={"All"} onChange={handlePriceChange} />
+                          }
+                          label="All"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              value={"Under 500"}
+                              onChange={handlePriceChange}
+                            />
+                          }
+                          label="Under 500"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              value={"Above 500"}
+                              onChange={handlePriceChange}
+                            />
+                          }
+                          label="Above 500"
+                        />
+                      </RadioGroup>
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
