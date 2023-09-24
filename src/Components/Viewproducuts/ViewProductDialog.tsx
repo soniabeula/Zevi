@@ -12,7 +12,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import styles from "./Modal.module.scss";
+import styles from "../main/Modal.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
@@ -52,7 +52,9 @@ const ViewProductDialog = ({
   const [brandSelectedData, setBrandSelectedData] = useState<any>();
   const [priceSelectedData, setPriceSelectedData] = useState<any>();
   const [brands, setBrands] = useState<any>([]);
-
+  const [selectedBrand, setSelectedBrand] = useState("All");
+  const [selectedPrice, setSelectedPrice] = useState("All");
+  const [selectedRating, setSelectedRating] = useState("All");
   const rating = ["5", "4", "3", "2", "1"];
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const ViewProductDialog = ({
 
   const handleCheckboxChange = (event: any) => {
     const itemName = event.target.value;
+    setSelectedBrand(itemName);
 
     if (itemName === "All") {
       setFilteredData(data);
@@ -89,6 +92,7 @@ const ViewProductDialog = ({
     }
   };
   const handlePriceChange = (e: any) => {
+    setSelectedPrice(e.target.value);
     if (e.target.value === "Under 500") {
       const filteredPrice = brandSelectedData?.filter((item: any) => {
         return item.price < 500;
@@ -107,6 +111,7 @@ const ViewProductDialog = ({
     }
   };
   const handleRatingChange = (event: any) => {
+    setSelectedRating(event.target.value);
     if (event.target.value === "All") {
       setFilteredData(priceSelectedData);
     } else {
@@ -125,7 +130,13 @@ const ViewProductDialog = ({
           <IconButton
             edge="start"
             color="inherit"
-            onClick={() => setOpenDialog(false)}
+            onClick={() => {
+              setOpenDialog(false);
+              setSelectedBrand("All");
+              setSelectedPrice("All");
+              setSelectedRating("All");
+              setFilteredData(data);
+            }}
             aria-label="close"
             className={styles.closeIcon}
           >
@@ -158,32 +169,28 @@ const ViewProductDialog = ({
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography className={styles.brand}>Brand</Typography>
+                    <Typography>Brand</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup defaultValue={"All"}>
+                      <RadioGroup
+                        defaultValue={"All"}
+                        value={selectedBrand}
+                        onChange={handleCheckboxChange}
+                      >
                         <FormControlLabel
                           key={"All"}
-                          control={
-                            <Radio
-                              onChange={handleCheckboxChange}
-                              value={"All"}
-                            />
-                          }
+                          control={<Radio value={"All"} />}
                           label={"All"}
+                          style={{ margin: 0, height: 35 }}
                         />
                         {brands?.map((item: any) => (
                           <FormControlLabel
                             key={item}
                             value={item}
-                            control={
-                              <Radio
-                                onChange={handleCheckboxChange}
-                                value={item}
-                              />
-                            }
+                            control={<Radio value={item} />}
                             label={item}
+                            style={{ margin: 0, height: 35 }}
                           />
                         ))}
                       </RadioGroup>
@@ -198,32 +205,27 @@ const ViewProductDialog = ({
                   >
                     <Typography>Price Range</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup defaultValue={"All"}>
+                      <RadioGroup
+                        defaultValue={"All"}
+                        value={selectedPrice}
+                        onChange={handlePriceChange}
+                      >
                         <FormControlLabel
-                          control={
-                            <Radio value={"All"} onChange={handlePriceChange} />
-                          }
+                          control={<Radio value={"All"} />}
                           label="All"
+                          style={{ margin: 0, height: 35 }}
                         />
                         <FormControlLabel
-                          control={
-                            <Radio
-                              value={"Under 500"}
-                              onChange={handlePriceChange}
-                            />
-                          }
+                          control={<Radio value={"Under 500"} />}
                           label="Under 500"
+                          style={{ margin: 0, height: 35 }}
                         />
                         <FormControlLabel
-                          control={
-                            <Radio
-                              value={"Above 500"}
-                              onChange={handlePriceChange}
-                            />
-                          }
+                          control={<Radio value={"Above 500"} />}
                           label="Above 500"
+                          style={{ margin: 0, height: 35 }}
                         />
                       </RadioGroup>
                     </FormGroup>
@@ -237,27 +239,23 @@ const ViewProductDialog = ({
                   >
                     <Typography>Rating</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup defaultValue={"All"}>
+                      <RadioGroup
+                        defaultValue={"All"}
+                        value={selectedRating}
+                        onChange={handleRatingChange}
+                      >
                         <FormControlLabel
-                          control={
-                            <Radio
-                              onChange={handleRatingChange}
-                              value={"All"}
-                            />
-                          }
+                          control={<Radio value={"All"} />}
                           label={"All"}
+                          style={{ margin: 0, height: 35 }}
                         />
                         {rating?.map((item: any) => {
                           return (
                             <FormControlLabel
-                              control={
-                                <Radio
-                                  onChange={handleRatingChange}
-                                  value={item}
-                                />
-                              }
+                              control={<Radio value={item} />}
+                              style={{ margin: 0, height: 35 }}
                               label={
                                 <Rating
                                   readOnly
