@@ -8,7 +8,6 @@ import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import SuggestionBox from "./SuggestionBox";
 
-const theme = createTheme();
 const useStyles: any = makeStyles((theme: any) => ({
   input: {
     "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -22,7 +21,6 @@ const useStyles: any = makeStyles((theme: any) => ({
 }));
 
 const Hero = () => {
-  const [isInputFocused, setInputFocused] = useState(false);
   const [searchString, setSearchString] = useState<String>("");
 
   const classes = useStyles();
@@ -40,19 +38,11 @@ const Hero = () => {
             InputProps={{
               type: "search",
               endAdornment: <SearchIcon color="action" />,
-              onFocus: () => {
-                setInputFocused(true);
-              },
-              onBlur: () => {
-                setTimeout(() => {
-                  setInputFocused(false);
-                }, 100);
-              },
             }}
           />
         </div>
         <div className={styles.CardContainer}>
-          {searchString && <SuggestionBox setInputFocused={setInputFocused} />}
+          {searchString && <SuggestionBox />}
         </div>
       </div>
     </>

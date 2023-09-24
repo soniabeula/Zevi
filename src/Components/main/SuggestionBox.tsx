@@ -3,11 +3,8 @@ import TrendsCard from "./TrendsCard";
 import { faker } from "@faker-js/faker";
 import { Link, Dialog } from "@mui/material";
 import { useState } from "react";
-import ViewProductDialog from "./ViewProductDialog";
+import ViewProductDialog from "../Viewproducuts/ViewProductDialog";
 
-export type SuggestionBoxType = {
-  setInputFocused: (val: any) => void;
-};
 export type Product = {
   productImage: string;
   productName: string;
@@ -40,16 +37,11 @@ export const lists: Product[] = faker.helpers.multiple(createRandomProduct, {
   count: 5,
 });
 
-const SuggestionBox = ({ setInputFocused }: SuggestionBoxType) => {
+const SuggestionBox = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
-    <div
-      onMouseDown={() => {
-        setInputFocused(true);
-      }}
-      className={styles.suggestionBox}
-    >
+    <div className={styles.suggestionBox}>
       <p style={{ margin: 0, fontWeight: 500, fontSize: 16 }}>
         {"Latest Trends"}
       </p>
