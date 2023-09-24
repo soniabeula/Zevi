@@ -3,8 +3,6 @@ import TrendsCard from "./TrendsCard";
 import { faker } from "@faker-js/faker";
 import { Link, Dialog } from "@mui/material";
 import { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 import ViewProductDialog from "./ViewProductDialog";
 
 export type SuggestionBoxType = {
@@ -65,23 +63,12 @@ const SuggestionBox = ({ setInputFocused }: SuggestionBoxType) => {
         ))}
       </div>
 
-      <p
-        style={{
-          margin: 0,
-          paddingTop: 10,
-          paddingBottom: 10,
-          fontWeight: 500,
-          fontSize: 16,
-        }}
-      >
-        {"Popular Suggetions"}
-      </p>
+      <p className={styles.suggestionHeader}>{"Popular Suggetions"}</p>
       <div>
         {lists.map((item: any) => {
           return (
             <Link
               onClick={() => setOpenDialog(true)}
-              className={styles.links}
               sx={{
                 textDecoration: "none",
                 color: "inherit",

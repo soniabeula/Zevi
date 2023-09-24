@@ -41,7 +41,7 @@ export const data = [
     brand: "Wrogn",
     people:80,
     rating: 2,
-    price: 500,
+    price: 300,
     discount: 800,
     isFavorite: true,
     image:

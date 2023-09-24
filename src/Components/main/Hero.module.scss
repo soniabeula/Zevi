@@ -37,7 +37,6 @@
   position: absolute;
   top: 18%;
   border-radius: 20px;
-  overflow: hidden;
 }
 
 .textField {
@@ -53,7 +52,14 @@
   height: 60%;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
-  overflow: scroll;
+}
+
+.suggestionHeader {
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px !important;
+  font-weight: 500;
+  font-size: 16;
 }
 .CardContainer {
   display: flex;
@@ -81,4 +87,15 @@
   font-size: 12;
   display: block;
   padding: 2px;
+}
+@media (max-width: 768px) {
+  .suggestionBox {
+    overflow: scroll;
+  }
+  .logo {
+    height: 30px;
+    width: 70px;
+    position: absolute;
+    left: 75%;
+  }
 }
