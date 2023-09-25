@@ -18,12 +18,15 @@
   height: 2rem;
   opacity: 0;
 }
+
+.viewProduct:hover {
+  cursor: pointer;
+}
 .card:hover {
   & .viewProduct {
     opacity: 0.7;
   }
 }
-
 
 .favouriteIcon {
   position: absolute;
@@ -31,7 +34,9 @@
   right: 0.5rem;
   color: rgb(180, 41, 41);
 }
-
+.favouriteIcon:hover {
+  cursor: pointer;
+}
 .cardImage {
   height: 100%;
   width: 100%;

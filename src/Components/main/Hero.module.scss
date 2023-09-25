@@ -91,11 +91,15 @@
 @media (max-width: 768px) {
   .suggestionBox {
     overflow: scroll;
+    width: 75%;
   }
   .logo {
     height: 30px;
     width: 70px;
     position: absolute;
     left: 75%;
+  }
+  .searchcontainer{
+    width: 75% !important;
   }
 }
