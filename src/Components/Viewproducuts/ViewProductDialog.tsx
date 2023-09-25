@@ -49,12 +49,15 @@ const ViewProductDialog = ({
   const classes = useStyles();
   const [searchString, setSearchString] = useState("");
   const [filteredData, setFilteredData] = useState<any>();
-  const [brandSelectedData, setBrandSelectedData] = useState<any>();
-  const [priceSelectedData, setPriceSelectedData] = useState<any>();
   const [brands, setBrands] = useState<any>([]);
-  const [selectedBrand, setSelectedBrand] = useState("All");
-  const [selectedPrice, setSelectedPrice] = useState("All");
-  const [selectedRating, setSelectedRating] = useState("All");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [brandSelectedData, setBrandSelectedData] = useState<any>();
+  const [brandsSelected, setBrandsSelected] = useState<Array<string>>([]);
+  const [selectedPrice, setSelectedPrice] = useState("");
+  const [priceselected, setPriceSelected] = useState<Array<string>>([]);
+  const [priceSelectedData, setPriceSelectedData] = useState<any>();
+  const [selectedRating, setSelectedRating] = useState("");
+  const [ratingSelected, setRatingSelected] = useState<Array<string>>([]);
   const rating = ["5", "4", "3", "2", "1"];
 
   useEffect(() => {
@@ -76,49 +79,84 @@ const ViewProductDialog = ({
     setFilteredData(searchedData);
   }, [searchString]);
 
-  const handleCheckboxChange = (event: any) => {
-    const itemName = event.target.value;
-    setSelectedBrand(itemName);
-
-    if (itemName === "All") {
+  useEffect(() => {
+    if (brandsSelected.length === 0) {
       setFilteredData(data);
       setBrandSelectedData(data);
     } else {
-      const filteredBrand = data?.filter(
-        (item: any) => itemName === item.brand
+      const filteredBrand = data?.filter((item: any) =>
+        brandsSelected.includes(item.brand)
       );
+
       setFilteredData(filteredBrand);
       setBrandSelectedData(filteredBrand);
     }
-  };
-  const handlePriceChange = (e: any) => {
-    setSelectedPrice(e.target.value);
-    if (e.target.value === "Under 500") {
-      const filteredPrice = brandSelectedData?.filter((item: any) => {
-        return item.price < 500;
-      });
-      setFilteredData(filteredPrice);
-      setPriceSelectedData(filteredPrice);
-    } else if (e.target.value === "Above 500") {
-      const filteredPrice = brandSelectedData?.filter(
-        (item: any) => item.price >= 500
-      );
-      setFilteredData(filteredPrice);
-      setPriceSelectedData(filteredPrice);
-    } else {
+  }, [selectedBrand, brandsSelected]);
+
+  useEffect(() => {
+    if (
+      priceselected.includes("Under 500") &&
+      priceselected.includes("Above 500")
+    ) {
+      // If both options are selected, show all data
       setFilteredData(brandSelectedData);
       setPriceSelectedData(brandSelectedData);
+    } else if (priceselected.length === 0) {
+      // If no prices are selected, show all data
+      setFilteredData(brandSelectedData);
+      setPriceSelectedData(brandSelectedData);
+    } else {
+      const filteredPrices = brandSelectedData?.filter((item: any) => {
+        if (priceselected.includes("Under 500")) {
+          return item.price <= 500;
+        } else if (priceselected.includes("Above 500")) {
+          return item.price > 500;
+        }
+        return false;
+      });
+
+      setFilteredData(filteredPrices);
+      setPriceSelectedData(filteredPrices);
+    }
+  }, [priceselected, brandSelectedData]);
+
+  useEffect(() => {
+    if (ratingSelected.length === 0) {
+      setFilteredData(data);
+    } else {
+      const filteredBrand = priceSelectedData?.filter((item: any) =>
+        ratingSelected.includes(String(item.rating))
+      );
+
+      setFilteredData(filteredBrand);
+    }
+  }, [ratingSelected, selectedRating]);
+
+  const handlePriceChange = (e: any) => {
+    const value = e.target.value;
+    setSelectedPrice(value);
+    if (e.target.checked) {
+      setPriceSelected([...priceselected, value]);
+    } else {
+      setPriceSelected(priceselected.filter((item: any) => item !== value));
     }
   };
-  const handleRatingChange = (event: any) => {
-    setSelectedRating(event.target.value);
-    if (event.target.value === "All") {
-      setFilteredData(priceSelectedData);
+  const handleRatingChange = (e: any) => {
+    const value = e.target.value;
+    setSelectedRating(value);
+    if (e.target.checked) {
+      setRatingSelected([...ratingSelected, value]);
     } else {
-      const filteredRating = priceSelectedData?.filter(
-        (item: any) => event.target.value === String(item.rating)
-      );
-      setFilteredData(filteredRating);
+      setRatingSelected(ratingSelected.filter((item: any) => item !== value));
+    }
+  };
+  const handleBrandChange = (e: any) => {
+    const value = e.target.value;
+    setSelectedBrand(value);
+    if (e.target.checked) {
+      setBrandsSelected([...brandsSelected, value]);
+    } else {
+      setBrandsSelected(brandsSelected.filter((item: any) => item !== value));
     }
   };
 
@@ -132,10 +170,6 @@ const ViewProductDialog = ({
             color="inherit"
             onClick={() => {
               setOpenDialog(false);
-              setSelectedBrand("All");
-              setSelectedPrice("All");
-              setSelectedRating("All");
-              setFilteredData(data);
             }}
             aria-label="close"
             className={styles.closeIcon}
@@ -173,27 +207,20 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup
-                        defaultValue={"All"}
-                        value={selectedBrand}
-                        onChange={handleCheckboxChange}
-                      >
+                      {brands?.map((item: any) => (
                         <FormControlLabel
-                          key={"All"}
-                          control={<Radio value={"All"} />}
-                          label={"All"}
+                          key={item}
+                          value={item}
+                          control={
+                            <Checkbox
+                              onChange={handleBrandChange}
+                              value={item}
+                            />
+                          }
+                          label={item}
                           style={{ margin: 0, height: 35 }}
                         />
-                        {brands?.map((item: any) => (
-                          <FormControlLabel
-                            key={item}
-                            value={item}
-                            control={<Radio value={item} />}
-                            label={item}
-                            style={{ margin: 0, height: 35 }}
-                          />
-                        ))}
-                      </RadioGroup>
+                      ))}
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
@@ -207,27 +234,26 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup
-                        defaultValue={"All"}
-                        value={selectedPrice}
-                        onChange={handlePriceChange}
-                      >
-                        <FormControlLabel
-                          control={<Radio value={"All"} />}
-                          label="All"
-                          style={{ margin: 0, height: 35 }}
-                        />
-                        <FormControlLabel
-                          control={<Radio value={"Under 500"} />}
-                          label="Under 500"
-                          style={{ margin: 0, height: 35 }}
-                        />
-                        <FormControlLabel
-                          control={<Radio value={"Above 500"} />}
-                          label="Above 500"
-                          style={{ margin: 0, height: 35 }}
-                        />
-                      </RadioGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={handlePriceChange}
+                            value={"Under 500"}
+                          />
+                        }
+                        label="Under 500"
+                        style={{ margin: 0, height: 35 }}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={handlePriceChange}
+                            value={"Above 500"}
+                          />
+                        }
+                        label="Above 500"
+                        style={{ margin: 0, height: 35 }}
+                      />
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
@@ -241,32 +267,26 @@ const ViewProductDialog = ({
                   </AccordionSummary>
                   <AccordionDetails className={styles.accordianDetails}>
                     <FormGroup>
-                      <RadioGroup
-                        defaultValue={"All"}
-                        value={selectedRating}
-                        onChange={handleRatingChange}
-                      >
-                        <FormControlLabel
-                          control={<Radio value={"All"} />}
-                          label={"All"}
-                          style={{ margin: 0, height: 35 }}
-                        />
-                        {rating?.map((item: any) => {
-                          return (
-                            <FormControlLabel
-                              control={<Radio value={item} />}
-                              style={{ margin: 0, height: 35 }}
-                              label={
-                                <Rating
-                                  readOnly
-                                  name="simple-controlled"
-                                  value={item}
-                                />
-                              }
-                            />
-                          );
-                        })}
-                      </RadioGroup>
+                      {rating?.map((item: any) => {
+                        return (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onChange={handleRatingChange}
+                                value={item}
+                              />
+                            }
+                            style={{ margin: 0, height: 35 }}
+                            label={
+                              <Rating
+                                readOnly
+                                name="simple-controlled"
+                                value={item}
+                              />
+                            }
+                          />
+                        );
+                      })}
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
