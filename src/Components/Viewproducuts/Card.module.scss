@@ -1,0 +1,71 @@
+.card {
+  width: 12rem;
+  height: 17rem;
+}
+
+.imageContainer {
+  height: 12rem;
+  width: 100%;
+  position: relative;
+}
+.viewProduct {
+  position: absolute;
+  bottom: 0;
+  background-color: #3a86ff;
+  color: white;
+  width: 100%;
+  text-align: center;
+  height: 2rem;
+  opacity: 0;
+}
+
+.viewProduct:hover {
+  cursor: pointer;
+}
+.card:hover {
+  & .viewProduct {
+    opacity: 0.7;
+  }
+}
+
+.favouriteIcon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: rgb(180, 41, 41);
+}
+.favouriteIcon:hover {
+  cursor: pointer;
+}
+.cardImage {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.detailsContainer {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cardName {
+  margin: 0;
+  font-size: 14px;
+}
+.priceContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+.price1 {
+  font-size: 12px;
+  color: grey;
+  text-decoration: line-through;
+  margin: 0;
+}
+.price2 {
+  font-size: 12px;
+  color: #3a86ff;
+  margin: 0;
+}
